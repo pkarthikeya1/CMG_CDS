@@ -1,0 +1,42 @@
+clear all
+close all
+clc
+%graphics_toolkit('gnuplot')
+L=1;
+nx=10;
+ny=nx;
+dx=L/(nx-1);
+dy=dx;
+x=linspace(0,1,10);
+y=linspace(0,1,10);
+T=ones(10,10);
+for i=1:10
+  for j=1:10
+  if ((x(i)-0.50).^2+(y(j)-0.5).^2)  >0.2
+    T(i,j)=40;
+  else
+    T(i,j)=20;
+  endif
+endfor
+endfor
+alpha=0.1;
+dt=0.01;
+nt=10000;
+Told=T;
+k1=(alpha*dt)/(dx^2);
+k2=(alpha*dt)/(dy^2);
+tic;
+for k=1:nt;
+        for i=2:nx-1
+            for j=2:ny-1;
+                T(i,j)=Told(i,j)+k1*(Told(i-1,j)-2*Told(i,j)+Told(i+1,j))+k2*(Told(i,j-1)-2*Told(i,j)+Told(i,j+1));
+            end
+        end
+        Told=T;
+      end   
+computation_time=toc();
+figure(1)
+contourf(x,y,T,'showtext','on')
+colormap jet
+colorbar;
+title(' Temp Disrtibution Plot')
