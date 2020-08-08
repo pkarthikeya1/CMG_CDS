@@ -1,0 +1,53 @@
+clear all
+close all
+clc
+graphics_toolkit('gnuplot')
+x=1;
+y=1;
+z=10;
+F=@(x,y,z) 10.*(y-x) ; 
+G=@(x,y,z) x*(28-z)-y ;
+H=@(x,y,z) x*y-(8/3)*z;
+h=0.01;
+t=0;
+N=100/h;
+ for i=1:N
+   t(i+1)=t(i)+h;
+  k1=h.*F(x(i),y(i),z(i));
+  l1=h.*G(x(i),y(i),z(i));
+  m1=h.*H(x(i),y(i),z(i));
+
+  
+  k2=h.*F((x(i)+0.5*k1),(y(i)+0.5*l1),(z(i)+0.5*m1));  
+  l2=h.*G((x(i)+0.5*k1),(y(i)+0.5*l1),(z(i)+0.5*m1));
+  m2=h.*H((x(i)+0.5*k1),(y(i)+0.5*l1),(z(i)+0.5*m1));
+  
+  k3=h.*F((x(i)+0.5*k2),(y(i)+0.5*l2),(z(i)+0.5*m2));
+  l3=h.*G((x(i)+0.5*k2),(y(i)+0.5*l2),(z(i)+0.5*m2));
+  m3=h.*H((x(i)+0.5*k2),(y(i)+0.5*l2),(z(i)+0.5*m2));
+  
+  k4=h.*F((x(i)+k3),(y(i)+l3),(z(i)+m3));
+  l4=h.*G((x(i)+k3),(y(i)+l3),(z(i)+m3));
+  m4=h.*H((x(i)+k3),(y(i)+l3),(z(i)+m3));
+  
+  x(i+1)=x(i)+(1/6)*(k1+2*k2+2*k3+k4);
+  y(i+1)=y(i)+(1/6)*(l1+2*l2+2*l3+l4);
+  z(i+1)=z(i)+(1/6)*(m1+2*m2+2*m3+m4);
+ 
+  
+end
+figure(1)
+title("xyz")
+plot3(x,y,z)
+xlabel("x")
+ylabel("y")
+zlabel("z")
+figure(2)
+title("x,t")
+plot(t,x,"r")
+figure(3)
+plot(t,y,"b")
+figure(4)
+plot(t,z,"c")
+
+
